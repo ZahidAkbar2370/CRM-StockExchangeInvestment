@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/tips.dart';
 import 'package:flutter_application_1/pages/profile.dart';
 import 'package:flutter_application_1/pages/cart.dart';
+import 'package:flutter_application_1/pages/calls.dart';
+import 'package:flutter_application_1/pages/payment_history.dart';
+import 'package:flutter_application_1/pages/package_offer.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import '../settings.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -25,14 +29,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: Container(
-        color: Colors.black,
+        color: AppStyle.bototmNavbarBackgroundColor,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 20),
           child: GNav(
-            backgroundColor: Colors.black,
-            color: Colors.white,
-            activeColor: Colors.white,
-            tabBackgroundColor: Colors.grey.shade800,
+            backgroundColor: AppStyle.bototmNavbarItemBackgroundColor,
+            color: AppStyle.bototmNavbarItemColor,
+            activeColor: AppStyle.bototmNavbarActiveItemColor,
+            tabBackgroundColor: AppStyle.bototmNavbarActiveItemBackgroundColor,
             gap: 8,
             onTabChange: (index) {
               setState(() {
@@ -47,10 +51,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
             },
             padding: EdgeInsets.all(16),
             tabs: [
-              GButton(icon: Icons.home, text: 'Home'),
-              GButton(icon: Icons.favorite_border, text: 'Tips'),
-              GButton(icon: Icons.search, text: 'Calls'),
-              GButton(icon: Icons.settings, text: 'Settings'),
+              GButton(
+                icon: Icons.dashboard,
+              ),
+              // GButton(
+              //   icon: Icons.lightbulb_outline,
+              // ),
+              GButton(
+                icon: Icons.call,
+              ),
+              GButton(
+                icon: Icons.local_offer,
+              ),
+              GButton(
+                icon: Icons.attach_money,
+              ),
+              GButton(
+                icon: Icons.account_circle,
+              ),
             ],
             selectedIndex: _selectedIndex,
           ),
@@ -61,20 +79,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
         children: <Widget>[
           // Replace these with your actual screens for each tab.
           Container(child: CartScreen()),
-          TipsScreen(),
-          Container(child: Text("Calls Screen")),
-          Container(
-            child: ProfileScreen(
-              name: 'John Doe', // Replace with actual user data
-              email: 'johndoe@example.com',
-              phoneNumber: '123-456-7890',
-              onLogout: () {
-                // Implement logout functionality here
-                // For example, you can navigate back to the login page
-                Navigator.pushReplacementNamed(
-                    context, '/login'); // Replace with your login route
-              },
-            ),
+          // TipsScreen(),
+          CallsScreen(),
+          PackageOfferScreen(),
+          PaymentHistoryScreen(),
+          ProfileScreen(
+            onLogout: () {
+              // Implement logout functionality here
+              // For example, you can navigate back to the login page
+              Navigator.pushReplacementNamed(
+                  context, '/login'); // Replace with your login route
+            },
           ),
         ],
         onPageChanged: (index) {

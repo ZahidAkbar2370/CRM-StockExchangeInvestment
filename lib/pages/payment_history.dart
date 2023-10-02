@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class ProfileScreen extends StatefulWidget {
-  final VoidCallback onLogout;
+class PaymentHistoryScreen extends StatefulWidget {
+  // final VoidCallback onLogout;
 
-  ProfileScreen({
-    required this.onLogout,
-  });
+  // PaymentHistoryScreen({
+  //   required this.onLogout,
+  // });
 
   @override
-  _ProfileScreenState createState() => _ProfileScreenState();
+  _PaymentHistoryScreenState createState() => _PaymentHistoryScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _PaymentHistoryScreenState extends State<PaymentHistoryScreen> {
   Map<String, dynamic> userData = {};
   bool isLoading = false;
 
@@ -70,17 +70,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
       },
     );
 
-    if (confirm == true) {
-      // User confirmed logout
-      widget.onLogout();
-    }
+    // if (confirm == true) {
+    //   // User confirmed logout
+    //   widget.onLogout();
+    // }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
+        title: Text('Payment History'),
         automaticallyImplyLeading: false,
       ),
       body: isLoading

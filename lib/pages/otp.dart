@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/tips.dart';
 import 'package:flutter_application_1/pages/dashboard.dart';
 import 'package:get/get.dart';
+import '../settings.dart';
 
 class OTPScreen extends StatefulWidget {
   @override
@@ -55,13 +56,17 @@ class _OTPScreenState extends State<OTPScreen> {
       appBar: AppBar(
         title: Text('OTP Verification'),
       ),
+      backgroundColor: Colors.blue,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'Enter OTP:',
-              style: TextStyle(fontSize: 18),
+              AppStyle.otpScreenText,
+              style: TextStyle(
+                fontSize: AppStyle.otpScreenTextSize,
+                color: AppStyle.otpScreenTextColor,
+              ),
             ),
             SizedBox(height: 20),
             Padding(
@@ -77,8 +82,14 @@ class _OTPScreenState extends State<OTPScreen> {
             ),
             SizedBox(height: 20),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppStyle
+                    .otpScreenButtonBackgroundColor, // Set the background color here
+              ),
               onPressed: verifyOTP,
-              child: Text('Verify OTP'),
+              child: Text(
+                'Verify OTP',
+              ),
             ),
           ],
         ),

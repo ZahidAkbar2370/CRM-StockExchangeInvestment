@@ -5,7 +5,7 @@ import '../components/error_dialog.dart';
 import '../components/my_textfield.dart';
 import '../components/square_tile.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../settings.dart';
 import 'tips.dart';
 import 'package:get/get.dart';
@@ -62,15 +62,7 @@ class LoginPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // ... (existing UI code)
               const SizedBox(height: 50),
-
-              // logo
-              // const Icon(
-              //   Icons.lock,
-              //   size: 100,
-              //   color: Color.fromARGB(255, 255, 255, 255),
-              // ),
 
               Image.asset(
                 'assets/images/main_logo.png',
@@ -83,10 +75,10 @@ class LoginPage extends StatelessWidget {
 
               // welcome back, you've been missed!
               Text(
-                AppLocalizations.of(context)!.appName,
+                AppStyle.loginScreenText,
                 style: TextStyle(
                   color: AppStyle.loginScreenTextColor,
-                  fontSize: 16,
+                  fontSize: AppStyle.loginScreenTextSize,
                 ),
               ),
 

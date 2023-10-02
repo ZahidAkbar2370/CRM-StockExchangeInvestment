@@ -10,6 +10,10 @@ class TipsScreen extends StatefulWidget {
 
 class _TipsScreenState extends State<TipsScreen> {
   List<Tips> tips = [];
+  bool isLoading = false;
+
+  DateTime? fromDate;
+  DateTime? toDate;
 
   @override
   void initState() {
@@ -18,15 +22,57 @@ class _TipsScreenState extends State<TipsScreen> {
   }
 
   Future<void> fetchDataFromApi() async {
+    setState(() {
+      isLoading = true; // Start loading
+    });
+
     final response =
         await http.get(Uri.parse('https://fakestoreapi.com/products'));
+
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
+
+// final filteredTips = tips
+//           .where((tip) =>
+//               (fromDate == null || tip.date.isAfter(fromDate!)) &&
+//               (toDate == null || tip.date.isBefore(toDate!)))
+//           .toList();
+
       setState(() {
         tips = data.map((item) => Tips.fromJson(item)).toList();
+        // tips = filteredTips;
+        isLoading = false; // Stop loading
       });
     } else {
       throw Exception('Failed to load data from the API');
+    }
+  }
+
+  Future<void> _selectFromDate(BuildContext context) async {
+    final selectedDate = await showDatePicker(
+      context: context,
+      initialDate: fromDate ?? DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime.now(),
+    );
+    if (selectedDate != null) {
+      setState(() {
+        fromDate = selectedDate;
+      });
+    }
+  }
+
+  Future<void> _selectToDate(BuildContext context) async {
+    final selectedDate = await showDatePicker(
+      context: context,
+      initialDate: toDate ?? DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime.now(),
+    );
+    if (selectedDate != null) {
+      setState(() {
+        toDate = selectedDate;
+      });
     }
   }
 
@@ -36,16 +82,62 @@ class _TipsScreenState extends State<TipsScreen> {
       appBar: AppBar(
         title: Text('Tips'),
       ),
-      body: ListView.builder(
-        itemCount: tips.length,
-        itemBuilder: (context, index) {
-          final tip = tips[index];
-          return ProductCard(
-            title: tip.title,
-            description: tip.description,
-            price: "2",
-          );
-        },
+      body: Column(
+        children: <Widget>[
+          // Date Filters
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              TextButton(
+                onPressed: () {
+                  _selectFromDate(context);
+                },
+                child: Text(
+                  'From Date: ${fromDate?.toLocal()}'.split(' ')[0],
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  _selectToDate(context);
+                },
+                child: Text(
+                  'To Date: ${toDate?.toLocal()}'.split(' ')[0],
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  fetchDataFromApi(); // Trigger data fetching with filters
+                },
+                child: Text('Search'),
+              ),
+            ],
+          ),
+
+          // Display selected dates
+          if (fromDate != null && toDate != null)
+            Text(
+              'Selected Date Range: ${fromDate!.toLocal()} - ${toDate!.toLocal()}',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+
+          // Loading Indicator or Data
+          isLoading
+              ? Center(
+                  child: CircularProgressIndicator()) // Show loading indicator
+              : Expanded(
+                  child: ListView.builder(
+                    itemCount: tips.length,
+                    itemBuilder: (context, index) {
+                      final tip = tips[index];
+                      return ProductCard(
+                        title: tip.title,
+                        description: tip.description,
+                        price: "2",
+                      );
+                    },
+                  ),
+                ),
+        ],
       ),
     );
   }
@@ -66,7 +158,6 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      // height: 350,
       child: Card(
         margin: EdgeInsets.all(16.0),
         child: Column(
@@ -96,7 +187,6 @@ class ProductCard extends StatelessWidget {
                       color: Colors.blue,
                     ),
                   ),
-                  // You can add a Buy Now button or any other actions here.
                 ],
               ),
             ),

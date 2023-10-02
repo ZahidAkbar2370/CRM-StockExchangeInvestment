@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import '../settings.dart';
 
-class ProfileScreen extends StatefulWidget {
-  final VoidCallback onLogout;
+class PackageOfferScreen extends StatefulWidget {
+  // final VoidCallback onLogout;
 
-  ProfileScreen({
-    required this.onLogout,
-  });
+  // PackageOfferScreen({
+  //   required this.onLogout,
+  // });
 
   @override
-  _ProfileScreenState createState() => _ProfileScreenState();
+  _PackageOfferScreenState createState() => _PackageOfferScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _PackageOfferScreenState extends State<PackageOfferScreen> {
   Map<String, dynamic> userData = {};
   bool isLoading = false;
 
@@ -70,19 +71,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
       },
     );
 
-    if (confirm == true) {
-      // User confirmed logout
-      widget.onLogout();
-    }
+    // if (confirm == true) {
+    //   // User confirmed logout
+    //   widget.onLogout();
+    // }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
+        title: Text('Package Offer'),
         automaticallyImplyLeading: false,
       ),
+      backgroundColor: AppStyle.packageOfferScreenBackgroundColor,
       body: isLoading
           ? Center(child: CircularProgressIndicator())
           : userData.isEmpty

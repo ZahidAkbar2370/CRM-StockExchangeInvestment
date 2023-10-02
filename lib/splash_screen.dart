@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'pages/login_page.dart';
+import 'settings.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -11,7 +12,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // Delay for 5 seconds and then navigate to the login page
+
     Future.delayed(Duration(seconds: 5), () {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => LoginPage()),
@@ -22,22 +23,21 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue, // Change to your desired background color
+      backgroundColor: AppStyle.splashScreenBackgroundColor,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SpinKitChasingDots(
-              color: Colors
-                  .white, // Change to your desired loading animation color
-              size: 50.0, // Change to your desired loading animation size
+              color: AppStyle.splashScreenLoderColor,
+              size: AppStyle.splashScreenLoderSize,
             ),
             SizedBox(height: 16.0),
             Text(
-              'My App',
+              AppStyle.splashScreenText,
               style: TextStyle(
-                fontSize: 24.0,
-                color: Colors.white, // Change to your desired text color
+                fontSize: AppStyle.splashScreenTextFontSize,
+                color: AppStyle.splashScreenTextColor,
               ),
             ),
           ],
