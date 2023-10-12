@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import '../settings.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileScreen extends StatefulWidget {
   final VoidCallback onLogout;
@@ -23,25 +25,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
     fetchUserData();
   }
 
+  Future<int> getUserIdFromSession() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int userId = prefs.getInt('userId') ?? 0;
+    return userId;
+  }
+
   Future<void> fetchUserData() async {
     setState(() {
       isLoading = true;
     });
 
-    final response =
-        await http.get(Uri.parse('https://fakestoreapi.com/users/1'));
+    final baseUrl = Apis.clientMainUrl;
+    int userId = await getUserIdFromSession();
+    final apiUrl =
+        baseUrl + 'clients_details_api.php?clientid=' + userId.toString();
+    final response = await http.get(Uri.parse(apiUrl));
 
     if (response.statusCode == 200) {
-      final Map<String, dynamic> data = json.decode(response.body);
-      setState(() {
-        userData = data;
-        isLoading = false;
-      });
+      final Map<String, dynamic> responseData = json.decode(response.body);
+
+      if (responseData.containsKey('data')) {
+        final Map<String, dynamic> userResponse = responseData['data'];
+        setState(() {
+          userData = userResponse;
+          isLoading = false;
+        });
+      } else {
+        print('No "data" field in the response');
+      }
     } else {
       setState(() {
         isLoading = false;
       });
-      // Handle error here
     }
   }
 
@@ -55,13 +71,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(true); // Confirm logout
+                Navigator.of(context).pop(true);
               },
               child: Text('Yes'),
             ),
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(false); // Cancel logout
+                Navigator.of(context).pop(false);
               },
               child: Text('No'),
             ),
@@ -71,7 +87,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
 
     if (confirm == true) {
-      // User confirmed logout
       widget.onLogout();
     }
   }
@@ -80,8 +95,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
+        title: Text(
+          'Profile',
+          style: TextStyle(color: AppStyle.appBarTextColor),
+        ),
         automaticallyImplyLeading: false,
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Image.asset('assets/images/logo.png'),
+        ),
+        backgroundColor: AppStyle.appBarBackgroundColor,
       ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
@@ -92,10 +115,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget buildUserProfile() {
-    final name =
-        userData['name']['firstname'] + ' ' + userData['name']['lastname'];
-    final email = userData['email'];
-    final phoneNumber = userData['phone'];
+    final name = userData['User'] ?? '';
+    final email = userData['Email'] ?? '';
+    final phoneNumber = userData['Mobile'] ?? '';
+    final deviceType = userData['device_type'] ?? 'null';
+    final passwordChangedDate = userData['Password_Changed_Date'] ?? 'null';
+    final timesTamp = userData['Timestamp'] ?? '';
 
     return Card(
       margin: EdgeInsets.all(16.0),
@@ -103,8 +128,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         children: <Widget>[
           ListTile(
             leading: CircleAvatar(
-              backgroundImage: NetworkImage(
-                  'https://placekitten.com/100/100'), // Replace with your profile image URL
+              backgroundImage: NetworkImage('https://placekitten.com/100/100'),
             ),
             title: Text(
               name,
@@ -127,10 +151,55 @@ class _ProfileScreenState extends State<ProfileScreen> {
               style: TextStyle(fontSize: 16),
             ),
           ),
+
+          Divider(), // A divider line
+          ListTile(
+            leading: Icon(Icons.access_time),
+            title: Text(
+              'Time Stamp:',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            subtitle: Text(
+              timesTamp,
+              style: TextStyle(fontSize: 16),
+            ),
+          ),
+          Divider(), // A divider line
+          ListTile(
+            leading: Icon(Icons.lock),
+            title: Text(
+              'Password Change Date:',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            subtitle: Text(
+              passwordChangedDate,
+              style: TextStyle(fontSize: 16),
+            ),
+          ),
+
+          Divider(), // A divider line
+          ListTile(
+            leading: Icon(Icons.phone_android),
+            title: Text(
+              'Device Type:',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            subtitle: Text(
+              deviceType,
+              style: TextStyle(fontSize: 16),
+            ),
+          ),
           SizedBox(height: 20),
           ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(
+                  AppStyle.logoutScreenButtonBackgroundColor),
+            ),
             onPressed: _confirmLogout,
-            child: Text('Logout'),
+            child: Text(
+              'Logout',
+              style: TextStyle(color: AppStyle.logoutScreenButtonTextColor),
+            ),
           ),
         ],
       ),

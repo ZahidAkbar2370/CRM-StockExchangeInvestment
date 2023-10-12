@@ -3,6 +3,7 @@ import 'pages/login_page.dart';
 import 'pages/dashboard.dart';
 import 'pages/tips.dart';
 import 'splash_screen.dart';
+import 'pages/calls.dart';
 // import 'package:flutter_localizations/flutter_localizations.dart';
 // import 'package:flutter_localizations/flutter_localizations.dart';
 // import 'package:intl/intl.dart';
@@ -18,17 +19,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: DashboardScreen(),
-      // locale: Locale("en"),
-      // localizationsDelegates: [
-      //   // AppLocalizations.delegate,
-      //   GlobalMaterialLocalizations.delegate,
-      //   GlobalWidgetsLocalizations.delegate,
-      //   GlobalCupertinoLocalizations.delegate,
-      // ],
-      // supportedLocales: [
-      //   Locale("en"),
-      // ],
+      home: SplashScreen(),
     );
   }
 }

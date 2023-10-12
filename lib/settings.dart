@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class AppStyle {
-  static const Color primaryColor = Colors.white;
-  static const Color secondaryColor = Colors.blueGrey;
+  static const Color primaryColor = Color(0xFF646FD4);
+  // static const Color secondaryColor = Colors.blueGrey;
   static const Color dangerColor = Colors.redAccent;
   static const Color successColor = Colors.green;
-  static const Color warningColor = Colors.yellow;
+  // static const Color warningColor = Colors.yellow;
   static const Color whiteTextColor = Colors.white;
   static const Color blackTextColor = Colors.black;
 
@@ -16,12 +16,12 @@ class AppStyle {
 .
 .
 */
-  static const Color splashScreenBackgroundColor = Colors.green;
-  static const Color splashScreenLoderColor = Color.fromARGB(255, 175, 76, 76);
+  static const Color splashScreenBackgroundColor = primaryColor;
+  static const Color splashScreenLoderColor = whiteTextColor;
   static const double splashScreenLoderSize = 50;
-  static const String splashScreenText = "Anil CRM";
+  static const String splashScreenText = "Best Stock Advisor";
   static const double splashScreenTextFontSize = 20;
-  static const Color splashScreenTextColor = Colors.white;
+  static const Color splashScreenTextColor = whiteTextColor;
 
 /* 
 .
@@ -30,12 +30,26 @@ class AppStyle {
 .
 .
 */
-  static const Color loginScreenBackgroundColor = Colors.green;
+  static const Color loginScreenBackgroundColor =
+      Color.fromARGB(255, 255, 255, 255);
   static const double loginScreenLogoWidth = 200;
   static const double loginScreenLogoHeight = 50;
-  static const Color loginScreenTextColor = Colors.white;
-  static const String loginScreenText = 'Welcome TO CRM';
-  static const double loginScreenTextSize = 20;
+  static const Color loginScreenTextColor = blackTextColor;
+  static const String loginScreenText = 'Welcome To Best Stock Advisor';
+  static const double loginScreenTextSize = 16;
+
+  static const Color loginScreenButtonBackgroundColor = primaryColor;
+  static const Color loginScreenButtonTextColor = whiteTextColor;
+
+  /* 
+.
+.
+. AppBar
+.
+.
+*/
+  static const Color appBarBackgroundColor = primaryColor;
+  static const Color appBarTextColor = whiteTextColor;
 
   /* 
 .
@@ -58,13 +72,13 @@ class AppStyle {
 .
 .
 */
-  static const Color bototmNavbarBackgroundColor = Colors.green;
-  static const Color bototmNavbarItemBackgroundColor = Colors.green;
-  static const Color bototmNavbarItemColor = Color.fromARGB(255, 97, 76, 175);
-  static const Color bototmNavbarActiveItemColor =
-      Color.fromARGB(255, 240, 240, 240);
-  static const Color bototmNavbarActiveItemBackgroundColor =
-      Color.fromARGB(255, 0, 0, 0);
+  static const Color bototmNavbarBackgroundColor = primaryColor;
+  static const Color bototmNavbarItemBackgroundColor = primaryColor;
+  static const Color bototmNavbarItemColor = whiteTextColor;
+  static const Color bototmNavbarActiveItemColor = primaryColor;
+  static const Color bototmNavbarActiveItemBackgroundColor = whiteTextColor;
+  static const String dashboardScreenChatLable1 = 'Positive Calls Rate %';
+  static const String dashboardScreenChatLable2 = 'Nagitive Calls Rate %';
 
 /* 
 .
@@ -73,8 +87,7 @@ class AppStyle {
 .
 .
 */
-  static const Color dashboardScreenBackgroundColor =
-      Color.fromARGB(255, 91, 76, 175);
+  static const Color dashboardScreenBackgroundColor = whiteTextColor;
 
 /* 
 .
@@ -83,20 +96,32 @@ class AppStyle {
 .
 .
 */
-  static const Color callsScreenBackgroundColor =
-      Color.fromARGB(255, 91, 76, 175);
+  static const Color callsScreenBackgroundColor = whiteTextColor;
 
 /* 
 .
 .
-. Calls/Tips Screen
+. Package Offer Screen
 .
 .
 */
-  static const Color packageOfferScreenBackgroundColor =
-      Color.fromARGB(255, 91, 76, 175);
+  static const Color packageOfferScreenBackgroundColor = whiteTextColor;
+
+  static const Color packageOfferScreenTextColor = blackTextColor;
+
+  /* 
+.
+.
+. Logout Screen
+.
+.
+*/
+  static const Color logoutScreenButtonBackgroundColor = primaryColor;
+  static const Color logoutScreenButtonTextColor = whiteTextColor;
 }
 
 class Apis {
-  static const String mainUrl = "https://softwebies.com";
+  static const String clientMainUrl = "https://client.beststockadvisor.co.in/";
+  static const String managementMainUrl =
+      "https://management.beststockadvisor.co.in/";
 }

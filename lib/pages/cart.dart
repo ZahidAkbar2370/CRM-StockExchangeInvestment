@@ -1,74 +1,114 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter_application_1/widgets/cart_widget.dart';
+import '../widgets/cart_widget.dart';
 import '../settings.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class CartScreen extends StatelessWidget {
-  // Replace this with your actual data
-  final List<PieChartSectionData> pieChartData = [
-    PieChartSectionData(
-      color: Colors.blue,
-      value: 30, // Replace with your data values
-      title: 'Label 1',
-    ),
-    PieChartSectionData(
-      color: Colors.green,
-      value: 40, // Replace with your data values
-      title: 'Label 2',
-    ),
-    PieChartSectionData(
-      color: Colors.red,
-      value: 20, // Replace with your data values
-      title: 'Label 3',
-    ),
-  ];
+class CartScreen extends StatefulWidget {
+  @override
+  _CartScreenState createState() => _CartScreenState();
+}
 
-  final List<PieChartSectionData> pieChartData1 = [
-    PieChartSectionData(
-      color: Colors.blue,
-      value: 30, // Replace with your data values
-      title: 'Label 1',
-    ),
-    PieChartSectionData(
-      color: Colors.green,
-      value: 40, // Replace with your data values
-      title: 'Label 2',
-    ),
-    PieChartSectionData(
-      color: Colors.red,
-      value: 20, // Replace with your data values
-      title: 'Label 3',
-    ),
-  ];
+class _CartScreenState extends State<CartScreen> {
+  Map<String, dynamic> userData = {};
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserData();
+  }
+
+  Future<void> fetchUserData() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    final baseUrl = Apis.managementMainUrl;
+    final apiUrl = baseUrl + 'pie_chart_data_for_cusotmers_api.php';
+    final response = await http.get(Uri.parse(apiUrl));
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+
+      if (responseData.containsKey('data')) {
+        final Map<String, dynamic> userResponse = responseData['data'];
+        setState(() {
+          userData = userResponse;
+          isLoading = false;
+        });
+      } else {
+        print('No "data" field in the response');
+      }
+    } else {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    double positiveValue =
+        double.tryParse(userData['Positive'] ?? '0.0') ?? 0.0;
+    double negativeValue =
+        double.tryParse(userData['Negative'] ?? '0.0') ?? 0.0;
+
+    final List<PieChartSectionData> pieChartData = [
+      PieChartSectionData(
+        color: Color.fromARGB(255, 0, 235, 31),
+        value: positiveValue,
+        title: AppStyle.dashboardScreenChatLable1,
+        titleStyle: TextStyle(
+          fontSize: 10,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+        ),
+      ),
+      PieChartSectionData(
+        color: Color.fromARGB(255, 255, 17, 0),
+        value: negativeValue,
+        title: AppStyle.dashboardScreenChatLable2,
+        titleStyle: TextStyle(
+          fontSize: 10,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+        ),
+      ),
+    ];
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dashboard'),
+        title: Text(
+          'Dashboard',
+          style: TextStyle(color: AppStyle.appBarTextColor),
+        ),
         automaticallyImplyLeading: false,
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Image.asset('assets/images/logo.png'),
+        ),
+        backgroundColor: AppStyle.appBarBackgroundColor,
       ),
       backgroundColor: AppStyle.dashboardScreenBackgroundColor,
-      body: Container(
-        // child: Column(
-        //   // mainAxisAlignment: MainAxisAlignment.center,
-        //   children: <Widget>[
-        //     // First Row
-        //     Container(
-        //       height: MediaQuery.of(context).size.height *
-        //           0.4, // Adjust the height as needed
-        child: PieChartWidget(pieChartData: pieChartData),
-        //     ),
-        //     // Second Row
-        //     Container(
-        //       height: MediaQuery.of(context).size.height *
-        //           0.3, // Adjust the height as needed
-        //       child: PieChartWidget(pieChartData: pieChartData1),
-        //     ),
-        //     // Add other cart content here
-        //   ],
-        // ),
-      ),
+      body: isLoading
+          ? Center(child: CircularProgressIndicator())
+          : userData.isEmpty
+              ? Center(
+                  child: Text(
+                    'Data Not Found',
+                    style:
+                        TextStyle(color: AppStyle.packageOfferScreenTextColor),
+                  ),
+                )
+              : buildUserProfile(pieChartData),
+    );
+  }
+
+  Widget buildUserProfile(List<PieChartSectionData> pieChartData) {
+    return Container(
+      child: PieChartWidget(pieChartData: pieChartData),
     );
   }
 }

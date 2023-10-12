@@ -10,19 +10,19 @@ void showErrorDialog(BuildContext context, String title, String content) {
         title: Text(
           title,
           style: TextStyle(
-            color: AppStyle.whiteTextColor, // Error Dialog Title Color
+            color: AppStyle.whiteTextColor,
           ),
         ),
         content: Text(
           content,
           style: TextStyle(
-            color: AppStyle.whiteTextColor, // Error Dialog Description Color
+            color: AppStyle.whiteTextColor,
           ),
         ),
         actions: [
           ElevatedButton(
             onPressed: () {
-              Navigator.of(context).pop(); // Close the dialog
+              Navigator.of(context).pop();
             },
             child: Text('OK'),
           ),

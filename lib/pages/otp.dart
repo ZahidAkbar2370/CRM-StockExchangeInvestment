@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/pages/tips.dart';
-import 'package:flutter_application_1/pages/dashboard.dart';
+import 'tips.dart';
+import 'dashboard.dart';
 import 'package:get/get.dart';
 import '../settings.dart';
 

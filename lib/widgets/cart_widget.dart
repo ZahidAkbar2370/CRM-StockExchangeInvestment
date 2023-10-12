@@ -10,13 +10,17 @@ class PieChartWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return AspectRatio(
       aspectRatio: 1,
-      child: PieChart(
-        PieChartData(
-          sections: pieChartData,
-          borderData: FlBorderData(show: false),
-          centerSpaceRadius: 40,
-          sectionsSpace: 0,
-        ),
+      child: Stack(
+        children: <Widget>[
+          PieChart(
+            PieChartData(
+              sections: pieChartData,
+              borderData: FlBorderData(show: false),
+              centerSpaceRadius: 80,
+              sectionsSpace: 1,
+            ),
+          ),
+        ],
       ),
     );
   }

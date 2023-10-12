@@ -1,0 +1,16 @@
+1: change app name: android/app/src/main/androidManifest.xml 
+
+android:label="Best Stock Advisor"
+
+2: change logo: past logo with .png extension name: logo.png into assets/images 
+
+3: go to lib/settings.dart
+
+change api's base url 
+colors
+
+4: run command flutter pub run flutter_launcher_icons:main (this will upgrade app fav icon)
+
+5: create apk run command : flutter build apk 
+
+6: go to build/outputs/flutter-apk/app-release.apk share to anyone for installation

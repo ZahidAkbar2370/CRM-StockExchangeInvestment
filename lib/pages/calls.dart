@@ -21,20 +21,32 @@ class _CallsScreenState extends State<CallsScreen> {
 
   Future<void> fetchDataFromApi() async {
     setState(() {
-      isLoading = true; // Start loading
+      isLoading = true;
     });
 
-    final response =
-        await http.get(Uri.parse('https://fakestoreapi.com/products'));
+    final baseUrl = Apis.managementMainUrl;
+    final apiUrl = baseUrl + 'stock_tips_call_api.php';
+    final response = await http.get(Uri.parse(apiUrl));
+    print(response.body);
 
     if (response.statusCode == 200) {
-      final List<dynamic> data = json.decode(response.body);
-      setState(() {
-        tips = data.map((item) => Tips.fromJson(item)).toList();
-        isLoading = false; // Stop loading
-      });
+      final Map<String, dynamic> jsonResponse = json.decode(response.body);
+
+      if (jsonResponse.containsKey("data")) {
+        final List<dynamic> data = jsonResponse["data"];
+
+        setState(() {
+          tips = data.map((item) => Tips.fromJson(item)).toList();
+          isLoading = false;
+        });
+      } else {
+        throw Exception('Data key not found in the API response');
+      }
     } else {
-      throw Exception('Failed to load data from the API');
+      setState(() {
+        isLoading = false;
+      });
+      print("no dta found");
     }
   }
 
@@ -42,23 +54,39 @@ class _CallsScreenState extends State<CallsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Calls'),
+        title: Text(
+          'Tips',
+          style: TextStyle(color: AppStyle.appBarTextColor),
+        ),
         automaticallyImplyLeading: false,
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Image.asset('assets/images/logo.png'),
+        ),
+        backgroundColor: AppStyle.appBarBackgroundColor,
       ),
       backgroundColor: AppStyle.callsScreenBackgroundColor,
       body: isLoading
-          ? Center(child: CircularProgressIndicator()) // Show loading indicator
-          : ListView.builder(
-              itemCount: tips.length,
-              itemBuilder: (context, index) {
-                final tip = tips[index];
-                return ProductCard(
-                  title: tip.title,
-                  description: tip.description,
-                  price: "2",
-                );
-              },
-            ),
+          ? Center(child: CircularProgressIndicator())
+          : tips.isEmpty
+              ? Center(
+                  child: Text(
+                    'Data Not Found',
+                    style:
+                        TextStyle(color: AppStyle.packageOfferScreenTextColor),
+                  ),
+                )
+              : ListView.builder(
+                  itemCount: tips.length,
+                  itemBuilder: (context, index) {
+                    final tip = tips[index];
+                    return ProductCard(
+                      title: tip.sagment,
+                      description: tip.ideas,
+                      price: tip.timeStamp,
+                    );
+                  },
+                ),
     );
   }
 }
@@ -100,7 +128,7 @@ class ProductCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Price: $price',
+                    '${price}',
                     style: TextStyle(
                       fontSize: 16.0,
                       fontWeight: FontWeight.bold,

@@ -2,14 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../settings.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PackageOfferScreen extends StatefulWidget {
-  // final VoidCallback onLogout;
-
-  // PackageOfferScreen({
-  //   required this.onLogout,
-  // });
-
   @override
   _PackageOfferScreenState createState() => _PackageOfferScreenState();
 }
@@ -24,117 +19,215 @@ class _PackageOfferScreenState extends State<PackageOfferScreen> {
     fetchUserData();
   }
 
+  Future<int> getUserIdFromSession() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int userId = prefs.getInt('userId') ?? 0;
+    return userId;
+  }
+
   Future<void> fetchUserData() async {
     setState(() {
       isLoading = true;
     });
 
-    final response =
-        await http.get(Uri.parse('https://fakestoreapi.com/users/1'));
+    final baseUrl = Apis.managementMainUrl;
+    int userId = await getUserIdFromSession();
+    final apiUrl =
+        baseUrl + 'customers_details_api.php?custid=' + userId.toString();
+    final response = await http.get(Uri.parse(apiUrl));
 
     if (response.statusCode == 200) {
-      final Map<String, dynamic> data = json.decode(response.body);
-      setState(() {
-        userData = data;
-        isLoading = false;
-      });
+      final Map<String, dynamic> responseData = json.decode(response.body);
+
+      if (responseData.containsKey('data')) {
+        final Map<String, dynamic> userResponse = responseData['data'];
+        setState(() {
+          userData = userResponse;
+          isLoading = false;
+        });
+      } else {
+        print('No "data" field in the response');
+      }
     } else {
       setState(() {
         isLoading = false;
       });
-      // Handle error here
     }
-  }
-
-  Future<void> _confirmLogout() async {
-    final confirm = await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Confirm Logout'),
-          content: Text('Are you sure you want to logout?'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(true); // Confirm logout
-              },
-              child: Text('Yes'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(false); // Cancel logout
-              },
-              child: Text('No'),
-            ),
-          ],
-        );
-      },
-    );
-
-    // if (confirm == true) {
-    //   // User confirmed logout
-    //   widget.onLogout();
-    // }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Package Offer'),
+        title: Text(
+          'Package Offer',
+          style: TextStyle(color: AppStyle.appBarTextColor),
+        ),
         automaticallyImplyLeading: false,
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Image.asset('assets/images/logo.png'),
+        ),
+        backgroundColor: AppStyle.appBarBackgroundColor,
       ),
       backgroundColor: AppStyle.packageOfferScreenBackgroundColor,
       body: isLoading
           ? Center(child: CircularProgressIndicator())
           : userData.isEmpty
-              ? Center(child: Text('Failed to load user data'))
+              ? Center(
+                  child: Text(
+                    'Data Not Found',
+                    style:
+                        TextStyle(color: AppStyle.packageOfferScreenTextColor),
+                  ),
+                )
               : buildUserProfile(),
     );
   }
 
   Widget buildUserProfile() {
-    final name =
-        userData['name']['firstname'] + ' ' + userData['name']['lastname'];
-    final email = userData['email'];
-    final phoneNumber = userData['phone'];
+    print("janu jakhar${userData}");
+    final FullName = userData['Full_Name'] ?? '';
+    final PackageName = userData['PackageName'] ?? '';
+    final PaymentMode = userData['PaymentMode'] ?? '';
+    final Paid_Amout = userData['Paid_Amout'] ?? '';
+    final Company_Amount = userData['Company_Amount'] ?? '';
+    final Tax_Amount = userData['Tax_Amount'] ?? '';
+    final SaleDate = userData['SaleDate'] ?? '';
+    final Exp_Date = userData['Exp_Date'] ?? '';
 
-    return Card(
-      margin: EdgeInsets.all(16.0),
-      child: Column(
-        children: <Widget>[
-          ListTile(
-            leading: CircleAvatar(
-              backgroundImage: NetworkImage(
-                  'https://placekitten.com/100/100'), // Replace with your profile image URL
+    return Container(
+      height: 400,
+      child: Card(
+        margin: EdgeInsets.all(16.0),
+        child: Column(
+          children: <Widget>[
+            ListTile(
+              leading: Icon(Icons.local_offer),
+              title: Text(
+                PackageName,
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              subtitle: Text(
+                FullName,
+                style: TextStyle(fontSize: 16),
+              ),
             ),
-            title: Text(
-              name,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            Divider(),
+            Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'Payment Mode:',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        PaymentMode,
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'Paid Amount:',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        Paid_Amout.toString(),
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-            subtitle: Text(
-              email,
-              style: TextStyle(fontSize: 16),
+            // second column
+            Divider(),
+            Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'Company Amount:',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        Company_Amount.toString(),
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'Tax Amount:',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        Tax_Amount.toString(),
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-          Divider(), // A divider line
-          ListTile(
-            leading: Icon(Icons.phone),
-            title: Text(
-              'Phone Number:',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            // third column
+            Divider(),
+            Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'Sale Date:',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        SaleDate.toString(),
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'Exp Date:',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        Exp_Date.toString(),
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-            subtitle: Text(
-              phoneNumber,
-              style: TextStyle(fontSize: 16),
-            ),
-          ),
-          SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: _confirmLogout,
-            child: Text('Logout'),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
