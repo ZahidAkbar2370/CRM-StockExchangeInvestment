@@ -25,7 +25,7 @@ class _CallsScreenState extends State<CallsScreen> {
     });
 
     final baseUrl = Apis.managementMainUrl;
-    final apiUrl = baseUrl + 'stock_tips_call_api.php';
+    final apiUrl = baseUrl + 'stock-tips-call-api.php';
     final response = await http.get(Uri.parse(apiUrl));
     print(response.body);
 

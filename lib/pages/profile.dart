@@ -39,7 +39,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final baseUrl = Apis.clientMainUrl;
     int userId = await getUserIdFromSession();
     final apiUrl =
-        baseUrl + 'clients_details_api.php?clientid=' + userId.toString();
+        baseUrl + 'client-details-api.php?clientid=' + userId.toString();
     final response = await http.get(Uri.parse(apiUrl));
 
     if (response.statusCode == 200) {

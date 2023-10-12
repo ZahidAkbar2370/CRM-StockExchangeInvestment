@@ -26,7 +26,7 @@ class _CartScreenState extends State<CartScreen> {
     });
 
     final baseUrl = Apis.managementMainUrl;
-    final apiUrl = baseUrl + 'pie_chart_data_for_cusotmers_api.php';
+    final apiUrl = baseUrl + 'pai-chart-for-cusotmers-api.php';
     final response = await http.get(Uri.parse(apiUrl));
 
     if (response.statusCode == 200) {

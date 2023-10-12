@@ -96,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
     final password = passwordController.text;
 
     final baseUrl = Apis.clientMainUrl;
-    final apiUrl = baseUrl + 'client_login_panel_api.php';
+    final apiUrl = baseUrl + 'client-login-panel-api.php';
 
     try {
       final response = await http.post(
@@ -111,7 +111,8 @@ class _LoginPageState extends State<LoginPage> {
       if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
         final userId = responseData['data']['Id'];
-        await saveUserIdInSession(userId);
+        final Mobile = responseData['data']['Mobile'];
+        await saveUserIdInSession(userId, Mobile);
 
         usernameController.text = '';
         passwordController.text = '';
@@ -136,8 +137,9 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  Future<void> saveUserIdInSession(int userId) async {
+  Future<void> saveUserIdInSession(int userId, String Mobile) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setInt('userId', userId);
+    await prefs.setString('Mobile', Mobile);
   }
 }
