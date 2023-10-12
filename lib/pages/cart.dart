@@ -59,7 +59,7 @@ class _CartScreenState extends State<CartScreen> {
       PieChartSectionData(
         color: Color.fromARGB(255, 0, 235, 31),
         value: positiveValue,
-        title: AppStyle.dashboardScreenChatLable1,
+        title: positiveValue.toString() + " %",
         titleStyle: TextStyle(
           fontSize: 10,
           fontWeight: FontWeight.bold,
@@ -69,7 +69,7 @@ class _CartScreenState extends State<CartScreen> {
       PieChartSectionData(
         color: Color.fromARGB(255, 255, 17, 0),
         value: negativeValue,
-        title: AppStyle.dashboardScreenChatLable2,
+        title: negativeValue.toString() + " %",
         titleStyle: TextStyle(
           fontSize: 10,
           fontWeight: FontWeight.bold,
@@ -107,8 +107,49 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   Widget buildUserProfile(List<PieChartSectionData> pieChartData) {
-    return Container(
-      child: PieChartWidget(pieChartData: pieChartData),
+    return Center(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8.0, 5, 0, 0),
+            child: Row(
+              children: [
+                Container(
+                  width: 20,
+                  height: 10,
+                  color: Colors.green, // Green color for Positive
+                ),
+                Text(
+                  'Positive Call Rate',
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 10), // Add some space between the labels
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8.0, 0, 0, 0),
+            child: Row(
+              children: [
+                Container(
+                  width: 20,
+                  height: 10,
+                  color: Colors.red, // Red color for Negative
+                ),
+                Text(
+                  'Negative Call Rate',
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+              height:
+                  10), // Add some space between the labels and the pie chart
+          PieChartWidget(pieChartData: pieChartData),
+        ],
+      ),
     );
   }
 }
