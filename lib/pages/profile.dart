@@ -189,18 +189,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
               style: TextStyle(fontSize: 16),
             ),
           ),
-          SizedBox(height: 20),
-          ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(
-                  AppStyle.logoutScreenButtonBackgroundColor),
-            ),
-            onPressed: _confirmLogout,
-            child: Text(
-              'Logout',
-              style: TextStyle(color: AppStyle.logoutScreenButtonTextColor),
+          SizedBox(height: 40),
+          Container(
+            width: 300,
+            height: 60,
+            child: ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(
+                  AppStyle.loginScreenButtonBackgroundColor,
+                ),
+                shape: MaterialStateProperty.all<OutlinedBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(25.0), // Set your desired radius
+                  ),
+                ),
+              ),
+              onPressed: _confirmLogout,
+              child: Text(
+                'LOGOUT',
+                style: TextStyle(
+                  color: AppStyle.loginScreenButtonTextColor,
+                  fontSize: 16,
+                ),
+              ),
             ),
           ),
+          // ElevatedButton(
+          //   style: ButtonStyle(
+          //     backgroundColor: MaterialStateProperty.all<Color>(
+          //         AppStyle.logoutScreenButtonBackgroundColor),
+          //   ),
+          //   onPressed: _confirmLogout,
+          //   child: Text(
+          //     'Logout',
+          //     style: TextStyle(color: AppStyle.logoutScreenButtonTextColor),
+          //   ),
+          // ),
         ],
       ),
     );

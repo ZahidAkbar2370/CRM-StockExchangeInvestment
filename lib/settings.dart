@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppStyle {
-  static const Color primaryColor = Color(0xFF646FD4);
+  static const Color primaryColor = Color(0xFFF7CE4D);
   // static const Color secondaryColor = Colors.blueGrey;
   static const Color dangerColor = Colors.redAccent;
   static const Color successColor = Colors.green;
@@ -30,15 +30,14 @@ class AppStyle {
 .
 .
 */
-  static const Color loginScreenBackgroundColor =
-      Color.fromARGB(255, 255, 255, 255);
+  static const Color loginScreenBackgroundColor = Color(0xFFF7CE4D);
   static const double loginScreenLogoWidth = 200;
-  static const double loginScreenLogoHeight = 50;
-  static const Color loginScreenTextColor = blackTextColor;
-  static const String loginScreenText = 'Welcome To Best Stock Advisor';
-  static const double loginScreenTextSize = 16;
+  static const double loginScreenLogoHeight = 100;
+  static const Color loginScreenTextColor = whiteTextColor;
+  static const String loginScreenText = 'Best Stock Advisor';
+  static const double loginScreenTextSize = 20;
 
-  static const Color loginScreenButtonBackgroundColor = primaryColor;
+  static const Color loginScreenButtonBackgroundColor = blackTextColor;
   static const Color loginScreenButtonTextColor = whiteTextColor;
 
   /* 
@@ -72,10 +71,10 @@ class AppStyle {
 .
 .
 */
-  static const Color bototmNavbarBackgroundColor = primaryColor;
-  static const Color bototmNavbarItemBackgroundColor = primaryColor;
+  static const Color bototmNavbarBackgroundColor = Color(0xFFF7CE4D);
+  static const Color bototmNavbarItemBackgroundColor = Color(0xFFF7CE4D);
   static const Color bototmNavbarItemColor = whiteTextColor;
-  static const Color bototmNavbarActiveItemColor = primaryColor;
+  static const Color bototmNavbarActiveItemColor = blackTextColor;
   static const Color bototmNavbarActiveItemBackgroundColor = whiteTextColor;
   static const String dashboardScreenChatLable1 = 'Positive Calls Rate %';
   static const String dashboardScreenChatLable2 = 'Nagitive Calls Rate %';

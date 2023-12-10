@@ -4,7 +4,9 @@ import 'tips.dart';
 import 'profile.dart';
 import 'cart.dart';
 import 'calls.dart';
+import 'drawer.dart';
 import 'payment_history.dart';
+import 'home.dart';
 import 'package_offer.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import '../settings.dart';
@@ -22,6 +24,7 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   int _selectedIndex = 0;
   PageController _pageController = PageController();
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void dispose() {
@@ -32,6 +35,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       bottomNavigationBar: Container(
         color: AppStyle.bototmNavbarBackgroundColor,
         child: Padding(
@@ -47,49 +51,69 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 _selectedIndex = index;
               });
 
-              _pageController.animateToPage(
-                index,
-                duration: Duration(milliseconds: 300),
-                curve: Curves.ease,
-              );
+              if (index == 5) {
+                // Open drawer when "Menu" tab is clicked
+                _scaffoldKey.currentState!.openDrawer();
+              } else {
+                // Switch to the selected page
+                _pageController.animateToPage(
+                  index,
+                  duration: Duration(milliseconds: 300),
+                  curve: Curves.ease,
+                );
+              }
+
+              // _pageController.animateToPage(
+              //   index,
+              //   duration: Duration(milliseconds: 300),
+              //   curve: Curves.ease,
+              // );
             },
             padding: EdgeInsets.all(16),
             tabs: [
               GButton(
+                icon: Icons.home,
+                // text: "Home",
+                // textStyle: TextStyle(fontSize: 10),
+              ),
+              GButton(
                 icon: Icons.dashboard,
-                text: "Dashboard",
-                textStyle: TextStyle(fontSize: 10),
+                // text: "Dashboard",
+                // textStyle: TextStyle(fontSize: 10),
               ),
               // GButton(
               //   icon: Icons.lightbulb_outline,
               // ),
               GButton(
                 icon: Icons.call,
-                text: "Tips",
-                textStyle: TextStyle(fontSize: 10),
+                // text: "Tips",
+                // textStyle: TextStyle(fontSize: 10),
               ),
               GButton(
                 // icon: Icons.local_offer,
                 icon: Icons.attach_money,
-                text: "Package & Payment",
-                textStyle: TextStyle(fontSize: 10),
+                // text: "Package & Payment",
+                // textStyle: TextStyle(fontSize: 10),
               ),
-              // GButton(
-              //   icon: Icons.attach_money,
-              // ),
+
               GButton(
                 icon: Icons.account_circle,
-                text: "Profile",
-                textStyle: TextStyle(fontSize: 10),
+                // text: "Profile",
+                // textStyle: TextStyle(fontSize: 10),
+              ),
+              GButton(
+                icon: Icons.menu,
               ),
             ],
             selectedIndex: _selectedIndex,
           ),
         ),
       ),
+      drawer: MyDrawer(),
       body: PageView(
         controller: _pageController,
         children: <Widget>[
+          HomeScreen(),
           Container(child: CartScreen()),
           // TipsScreen(),
           CallsScreen(),
@@ -104,6 +128,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               );
             },
           ),
+          // Container(child: MyDrawer()),
         ],
         onPageChanged: (index) {
           setState(() {

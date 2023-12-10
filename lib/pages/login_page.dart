@@ -30,57 +30,74 @@ class _LoginPageState extends State<LoginPage> {
       body: isLoading
           ? Center(child: CircularProgressIndicator())
           : SafeArea(
-              child: Center(
-                child: Column(
-                  // mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 100),
-                    Image.asset(
-                      'assets/images/logo.png',
-                      width: AppStyle.loginScreenLogoWidth,
-                      height: AppStyle.loginScreenLogoHeight,
-                    ),
-                    const SizedBox(height: 50),
-                    Text(
-                      AppStyle.loginScreenText,
-                      style: TextStyle(
-                        color: AppStyle.loginScreenTextColor,
-                        fontSize: AppStyle.loginScreenTextSize,
+              child: SingleChildScrollView(
+                child: Center(
+                  child: Column(
+                    // mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 50),
+                      Image.asset(
+                        'assets/images/login_logo.png',
+                        width: AppStyle.loginScreenLogoWidth,
+                        height: AppStyle.loginScreenLogoHeight,
                       ),
-                    ),
-                    const SizedBox(height: 25),
-                    MyTextField(
-                      controller: usernameController,
-                      hintText: 'Mobile #',
-                      obscureText: false,
-                    ),
-                    const SizedBox(height: 10),
-                    MyTextField(
-                      controller: passwordController,
-                      hintText: 'Password',
-                      obscureText: true,
-                    ),
-                    const SizedBox(height: 30),
-                    Container(
-                      width: 150,
-                      height: 50,
-                      child: ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                              AppStyle.loginScreenButtonBackgroundColor),
+                      const SizedBox(height: 20),
+                      Text(
+                        AppStyle.loginScreenText,
+                        style: TextStyle(
+                          color: AppStyle.loginScreenTextColor,
+                          fontSize: AppStyle.loginScreenTextSize,
+                          fontWeight: FontWeight.bold,
                         ),
-                        onPressed: () {
-                          signUserIn(context);
-                        },
-                        child: Text(
-                          'Sign In',
-                          style: TextStyle(
-                            color: AppStyle.loginScreenButtonTextColor,
+                      ),
+                      const SizedBox(height: 25),
+                      MyTextField(
+                        controller: usernameController,
+                        hintText: 'Mobile #',
+                        obscureText: false,
+                      ),
+                      const SizedBox(height: 20),
+                      MyTextField(
+                        controller: passwordController,
+                        hintText: 'Password',
+                        obscureText: true,
+                      ),
+                      const SizedBox(height: 30),
+                      Container(
+                        width: 300,
+                        height: 60,
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                              AppStyle.loginScreenButtonBackgroundColor,
+                            ),
+                            shape: MaterialStateProperty.all<OutlinedBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    25.0), // Set your desired radius
+                              ),
+                            ),
+                          ),
+                          onPressed: () {
+                            signUserIn(context);
+                          },
+                          child: Text(
+                            'SIGN IN',
+                            style: TextStyle(
+                              color: AppStyle.loginScreenButtonTextColor,
+                              fontSize: 16,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 50),
+                      Image.asset(
+                        'assets/images/trading_image.png',
+                        // width: 900,
+                        // height: AppStyle.loginScreenLogoHeight,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
